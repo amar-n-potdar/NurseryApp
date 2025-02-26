@@ -7,6 +7,7 @@ import image5 from "../images/image5.png";
 import image6 from "../images/image6.png";
 import search from "../images/search.svg";
 import up from "../images/up.svg";
+import jj from "../images/jj.svg"
 import down from "../images/down.svg";
 
 const LowStockProducts = () => {
@@ -19,12 +20,18 @@ const LowStockProducts = () => {
     { id: 6, image: image6, name: "Succulents", category: "Sympathy Gift Plants", price: "5$", vendor: "J Nursery", quantity: 2 },
     { id: 7, image: image1, name: "Monstera Deliciosa", category: "Succulents", price: "20.5$", vendor: "F Nursery", quantity: 2 },
   ];
-
   const [searchTerm, setSearchTerm] = useState('');
   const [quantities, setQuantities] = useState(products.map(p => p.quantity));
 
   const handleIncrement = (index) => {
     setQuantities(prevQuantities => prevQuantities.map((q, i) => (i === index ? q + 1 : q)));
+  };
+
+  const handleQuantityChange = (index, value) => {
+    const newValue = Math.max(1, value);
+    setQuantities(prevQuantities =>
+      prevQuantities.map((q, i) => (i === index ? newValue : q))
+    );
   };
 
   const handleDecrement = (index) => {
@@ -56,17 +63,17 @@ const LowStockProducts = () => {
               <img alt="" src={search} />
             </div>
           </div>
-          <div className="justify-start items-start gap-3 flex">
-            <div className="w-[93px] bg-[#7aa262] rounded-[9px] flex-col justify-start items-end gap-2 inline-flex">
-              <div className="w-[35px] h-[38px] p-2.5 bg-[#7aa262] rounded-lg flex-col justify-center items-center gap-2.5 flex" />
-              <div className="text-white text-sm font-normal font-['Poppins']">Filters</div>
+          <div className="justify-start items-center gap-3 flex">
+            <div className="w-[93px] h-[50px] bg-[#7aa262] rounded-[9px] inline-flex justify-start items-center gap-2 ">
+              <div className="w-[35px] h-[38px] p-2.5 bg-[#7aa262] rounded-lg  justify-center items-center gap-2.5 flex" />
+              <div className="text-white text-sm items-center font-normal font-['Poppins'] flex mr-10"><img src={jj}/>Filters</div>
             </div>
           </div>
         </div>
         <div className="h-[1237px] bg-neutral-100 rounded border border-[#5b5b5b] flex-col justify-start items-start gap-5 flex overflow-hidden">
           <table className="w-[1001px] bg-white">
             <thead>
-              <tr className="bg-[#ececec]">
+              <tr className="bg-[#ececec] grid grid-cols-7">
                 <th className="px-3 py-2.5 text-black text-base font-medium font-['Poppins'] tracking-tight">Product</th>
                 <th className="px-3 py-2.5 text-black text-base font-medium font-['Poppins'] tracking-tight">Product Name</th>
                 <th className="px-3 py-2.5 text-black text-base font-medium font-['Poppins'] tracking-tight">Category</th>
@@ -78,7 +85,7 @@ const LowStockProducts = () => {
             </thead>
             <tbody>
               {filteredData.map((product, index) => (
-                <tr key={product.id} className="bg-white">
+                <tr key={product.id} className="bg-white grid grid-cols-7 justify-items-center">
                   <td className="py-2.5 flex justify-center items-center">
                     <img className="w-[55px] h-[65px] px-[2.65px] py-[5.30px] rounded-[3px] shadow-[0px_1.0607415437698364px_1.0607415437698364px_0px_rgba(0,0,0,0.25)]" src={product.image} alt={product.name} />
                   </td>
@@ -86,30 +93,26 @@ const LowStockProducts = () => {
                   <td className="px-3 py-2.5 text-black text-base font-normal font-['Poppins'] leading-tight">{product.category}</td>
                   <td className="px-3 py-2.5 text-[#323c47] text-sm font-normal font-['Poppins'] tracking-tight">{product.price}</td>
                   <td className="px-3 py-2.5 text-black text-base font-normal font-['Poppins'] leading-tight">{product.vendor}</td>
-                  <td className="px-3 py-2.5 flex justify-center items-center">
-                    <div className="w-[104px] h-[21px] rounded-md border border-[#7aa262] flex justify-start items-center gap-px">
+                  <td className="px-3 py-2.5 flex justify-center items-start">
+                    <div className="w-[104px] h-[30px] rounded-md border border-[#7aa262] flex justify-start items-center gap-px">
                       <div className="h-[20px] p-[5.05px] flex justify-center items-center gap-[5.05px]">
                         <div className="text-black text-[10px] font-light font-['Poppins']">Quantity</div>
                       </div>
-                      <div className="pt-[0.2] pl-1 pr-[4.95px] pb-[2.69px] rounded-sm border border-black flex justify-center items-center">
-                        <div className="flex justify-center items-center gap-[5px]">
-                          <div className="w-5 h-1.5 text-black text-[10px] font-light font-['Poppins']">{quantities[index]}</div>
-                          <div className="w-[6.07px] flex flex-col justify-start items-start gap-[3px]">
-                            <button onClick={() => handleIncrement(index)}>
-                              <img src={up} alt="up" className="w-4 h-4" />
-                            </button>
-                            <button onClick={() => handleDecrement(index)}>
-                              <img src={down} alt="down" className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </div>
+                      <div className="pt-[0.2] pl-1 pr-[4.95px] pb-[2.69px] rounded-sm border h-[22px] border-black flex justify-center items-center">
+                        <input
+                          type="number"
+                          value={quantities[index]}
+                          onChange={(e) => handleQuantityChange(index, parseInt(e.target.value))}
+                          className="w-10 text-center text-black text-[10px] font-light font-['Poppins']"
+                          min="1"
+                        />
                       </div>
                     </div>
                   </td>
-                  <td className="px-3 py-2.5 flex justify-center items-center">
-                    <div className="px-2.5 py-1 bg-[#7aa262] rounded-[5px] flex justify-center items-center gap-2">
+                  <td className="px-3 py-2.5 flex justify-center items-center mr-1">
+                    <button className="px-2.5 py-1 bg-[#7aa262] rounded-[5px] flex justify-center items-center gap-2">
                       <div className="text-white text-xs font-normal font-['Poppins']">Update</div>
-                    </div>
+                    </button>
                   </td>
                 </tr>
               ))}
